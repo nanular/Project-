@@ -65,6 +65,16 @@ https://maps.googleapis.com/maps/api/streetview?size=600x300&location=30.4162076
 
 
 
+Setup Local Server Using Terminal
+=================================
+• Open Terminal & Navigate To Directory That Contains Files To Host
+• Type The Following Commands Into Terminal:
+	
+	npm install -g node-static
+	static .
+
+• Copy URL (example: http://127.0.0.1:8080) & Paste Into Browser
+
 
 
 
