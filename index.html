@@ -13,18 +13,17 @@
 
       <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
-      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+      <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
       <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5dj6sTAyGKxhzt9pd2gAo7Kp2JfOacLc&libraries=places"></script>
-    
    </head>
 
   <body>
 
   <form>
     <h1>Enter Address</h1>    
-    <input type="text" placeholder="Street Address Line A" id="address_street1">
-    <input type="text" placeholder="Street Address Line B" id="address_street2">
+    <input type="text" placeholder="Street Address Line 1" id="address_street1">
+    <input type="text" placeholder="Street Address Line 2" id="address_street2">
     <input type="text" placeholder="City" id="address_city">
     <input type="text" placeholder="State" id="address_state">
     <input type="text" placeholder="Zip Code" id="address_zipcode">
@@ -37,7 +36,7 @@
   </form>
 
   <div id="out-contain">
-    <iframe id="output"></iframe>
+    <iframe id="output" hidden></iframe>
   </div>
 
 

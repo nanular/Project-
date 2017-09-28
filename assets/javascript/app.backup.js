@@ -70,7 +70,6 @@ $("#address_submit").click(function()
 
 
 
-
 	//Google GeoCode API (Full Address)
 	var geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + userAddress.street1 + ",+" + 
 		userAddress.city + ",+" + userAddress.state + "&key=" + apiKeys.googleGeocode;
@@ -95,7 +94,6 @@ $("#address_submit").click(function()
 		var streetViewImage = $("<img>").attr("src", steetviewURL);
 		$("#streetview_results").prepend(streetViewImage);
 	})
-
 
 
 
@@ -135,7 +133,6 @@ $("#address_submit").click(function()
 
 
 
-
 	//OpenWeatherMap API
 	var openWeatherURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + userLocation.latitude + 
 		"&lon=" + userLocation.longitude + "&appid=" + apiKeys.openWeatherAPI;
@@ -155,41 +152,46 @@ $("#address_submit").click(function()
 
 
 
-
 	//Zillow API
 	var zillowURL = "https://www.zillow.com/webservice/GetSearchResults.htm?zws-id=" + apiKeys.zillow + 
 		"&address=" + userAddress.street1 + "&citystatezip=" + userAddress.city + 
 		"%2C+" + userAddress.state;
 	console.log("Zillow URL: " + zillowURL);
 
-	$.getJSON("http://anyorigin.com/go?url="+escape(zillowURL)+"&callback=?", function(zillowapireturn)
+	function zillowGrab()
 	{
-		var iframe = $("#output")[0];
-		var doc = iframe.document;
-		
-		if (iframe.contentDocument)
+		$.getJSON("http://anyorigin.com/go?url="+escape(zillowURL)+"&callback=?", function(zillowapireturn)
 		{
-			doc = iframe.contentDocument;
-		} else if (iframe.contentWindow)
+			var iframe = $("#output")[0];
+			var doc = iframe.document;
+			
+			if (iframe.contentDocument)
+			{
+				doc = iframe.contentDocument;
+			} else if (iframe.contentWindow)
+			{
+				doc = iframe.contentWindow.document;
+			}
+			
+			doc.open();
+			doc.writeln(zillowapireturn.contents);
+			doc.close();
+
+			console.log(zillowapireturn);
+		})
+
+		.done(function(zillowapireturn)
 		{
-			doc = iframe.contentWindow.document;
-		}
-		
-		doc.open();
-		doc.writeln(zillowapireturn.contents);
-		doc.close();
+			console.log("Once Again: ");
+			console.log(zillowapireturn);
+		})
 
-	})
+		return false;
+	}
 
-	.done(function(zillowapireturn)
-	{
-		console.log(zillowapireturn.contents);
-
-
-	})
+	zillowGrab();
 	
 	
-
 
 
 
