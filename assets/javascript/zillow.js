@@ -39,6 +39,9 @@
 
 
 
+
+
+
 	$.ajax(
 	{
 		url: "assets/xml/GetSearchResults.xml",
@@ -49,3 +52,21 @@
 	{
 		console.log(zillowapireturn);
 	})
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
