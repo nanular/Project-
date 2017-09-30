@@ -1,25 +1,28 @@
 $(document).ready(function()
 {
+	var vpWindowWidth = $(window).width();
+	var vpHeadingWidth = $("#snapshot_header").outerWidth();
+	console.log("Window Width: " + vpWindowWidth);
+	console.log("h1 Width: " + vpHeadingWidth);
+	var h1Margin = (vpWindowWidth - vpHeadingWidth) / 2;
+	console.log(h1Margin);
+
+	$("#snapshot_header").css("margin-left", h1Margin);
 
 	centeranimation();
 
 	function centeranimation()
 	{
 
-		var vpWindowWidth = $(window).width();
-		var vpHeadingWidth = $("h1").width();
-		console.log("Window Width: " + vpWindowWidth);
-		console.log("h1 Width: " + vpHeadingWidth);
-		var h1Margin = (vpWindowWidth - vpHeadingWidth) / 2;
-		console.log(h1Margin);
-		$("h1").css("margin-left", h1Margin);
+		
+		$("#snapshot_header").css("margin-left", h1Margin);
 
 		var winHeight = window.innerHeight;
 		var elementHeight = $(".center_animation").outerHeight();
 		var topValue = (winHeight / 2) - (elementHeight / 2);
 		$(".center_animation").stop().animate({top: topValue + "px"}, 2000, function() {
-			$("h1").fadeIn(1700);
-			$("h1").css("position", "fixed");
+			$("#snapshot_header").fadeIn(1700);
+			$("#snapshot_header").css("position", "fixed");
 		});
 	}
 
@@ -252,7 +255,7 @@ $("#address_submit").click(function()
 	   	placeId: location.cityPlaceID
 	   }, function (place, status)
 	   {
-	      for (i = 0; i < 9; i++)
+	      for (i = 0; i < 10; i++)
 	      {
 				var photoURL = place.photos[i].getUrl({maxWidth: 300, maxHeight: 300});
 				var addImg = $("<img>");
