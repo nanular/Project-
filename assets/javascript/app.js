@@ -269,7 +269,7 @@ $("#address_submit").click(function()
 	var zillowURL = "https://www.zillow.com/webservice/GetDeepSearchResults.htm?zws-id=" + apis.zillow + 
 		"&address=" + streetPlus + "&citystatezip=" + cityPlus + "%2C+" + address.state;
 
-	$.getJSON("http://anyorigin.com/go?url="+escape(zillowURL)+"&callback=?", function(zillowapireturn)
+	$.getJSON("https://anyorigin.com/go?url="+escape(zillowURL)+"&callback=?", function(zillowapireturn)
 	{
 		var iframe = $("#output")[0];
 		var xmlDocument = iframe.document;
