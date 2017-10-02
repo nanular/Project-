@@ -1,32 +1,30 @@
 $(document).ready(function()
 {
-	var vpWindowWidth = $(window).width();
-	var vpHeadingWidth = $("#snapshot_header").outerWidth();
-	console.log("Window Width: " + vpWindowWidth);
-	console.log("h1 Width: " + vpHeadingWidth);
-	var h1Margin = (vpWindowWidth - vpHeadingWidth) / 2;
-	console.log(h1Margin);
-
-	$("#snapshot_header").css("margin-left", h1Margin);
-
 	centeranimation();
+	centerheader();
 
 	function centeranimation()
 	{
-
-		
-		$("#snapshot_header").css("margin-left", h1Margin);
-
 		var winHeight = window.innerHeight;
 		var elementHeight = $(".center_animation").outerHeight();
 		var topValue = (winHeight / 2) - (elementHeight / 2);
-		$(".center_animation").stop().animate({top: topValue + "px"}, 2000, function() {
-			$("#snapshot_header").fadeIn(1700);
-			$("#snapshot_header").css("position", "fixed");
+		$(".center_animation").stop().animate({top: topValue + "px"}, 2000, function()
+		{
+			$("#snapshot_header").fadeIn(1700);			
 		});
 	}
 
-	//$(window).resize(centeranimation);
+	function centerheader()
+	{
+		var vpWindowWidth = $(window).width();
+		var vpHeadingWidth = $("#snapshot_header").outerWidth();
+		var h1Margin = (vpWindowWidth - vpHeadingWidth) / 2;
+
+		$("#snapshot_header").css("right", h1Margin)
+					.css("left", h1Margin);
+	}
+
+	$(window).resize(centerheader);
 
 	var apis =
 	{
@@ -77,7 +75,9 @@ $(document).ready(function()
 		lotSize: 0,
 		sqft: 0,
 		fips: 00000,
-		type: ""
+		type: "",
+		taxassessment: 0.00,
+		taxassessmentyear: 1900
 	}
 
 
@@ -113,18 +113,12 @@ $("#address_submit").click(function()
 
 	.done(function(geocodeapireturn)
 	{
-		console.log("Google GeoCode URL: " + geocodeURL);
-		console.log(geocodeapireturn);
-
 		location.lat = geocodeapireturn.results[0].geometry.location.lat;
 		location.lon = geocodeapireturn.results[0].geometry.location.lng;
 		location.placeID = geocodeapireturn.results[0].place_id;
 
-
 		var addressArray = geocodeapireturn.results[0].address_components;
 		var addressArrayLength = addressArray.length;
-
-		console.log(addressArray);
 
 		for (i = 0; i < addressArrayLength; i++)
 		{
@@ -191,8 +185,8 @@ $("#address_submit").click(function()
 
 		.done(function(weatherapireturn)
 		{
-			console.log("OpenWeatherMap URL: " + openWeatherURL);
-			console.log(weatherapireturn);
+			//console.log("OpenWeatherMap URL: " + openWeatherURL);
+			//console.log(weatherapireturn);
 
 			weather.description = weatherapireturn.weather[0].description;
 			weather.icon = weatherapireturn.weather[0].icon;
@@ -213,7 +207,6 @@ $("#address_submit").click(function()
 
 			$("#weather_results").append("<h2>Current Weather</h2><br>")
 				.append("<span>Condition: " + weather.description + "</span><br>")
-				.append(console.log(""))
 				.append("<span>Temperature (F): " + weather.tempF.toFixed(2) + "</span><br>")
 				.append("<span>Temperature (C): " + weather.tempC.toFixed(2) + "</span><br>")
 				.append("<span>Humidity: " + weather.humidity + "%</span><br>")
@@ -222,7 +215,7 @@ $("#address_submit").click(function()
 
 
 		//Google Street View API
-		var steetviewURL = "https://maps.googleapis.com/maps/api/streetview?size=550x275&location=" + 
+		var steetviewURL = "https://maps.googleapis.com/maps/api/streetview?size=550x310&location=" + 
 			location.lat + "," + location.lon + "&key=" + apis.gStreetView;
 
 		var streetViewImage = $("<img>");
@@ -248,7 +241,6 @@ $("#address_submit").click(function()
 
 		//Google Places API
 		var service = new google.maps.places.PlacesService(document.getElementById("google_places"));
-		console.log(service);
 	   
 	   service.getDetails(
 	   {
@@ -295,14 +287,31 @@ $("#address_submit").click(function()
 		zData.bedrooms = $("iframe").contents().find("bedrooms").html();
 		zData.bathrooms = $("iframe").contents().find("bathrooms").html();
 		zData.fips = $("iframe").contents().find("FIPScounty").html();
+
 		zData.sqft = $("iframe").contents().find("finishedSqFt").html();
 		zData.lotSize = $("iframe").contents().find("lotSizeSqFt").html();
+
+		if (zData.sqft != undefined)
+		{
+			zData.sqft = parseFloat(zData.sqft);
+			zData.sqft = zData.sqft.toLocaleString();		
+		}
+
+		if (zData.lotSize != undefined)
+		{
+			zData.lotSize = parseFloat(zData.lotSize);
+			zData.lotSize = zData.lotSize.toLocaleString();	
+		}
+
 		zData.type = $("iframe").contents().find("useCode").html();
+		
+		zData.taxassessment = $("iframe").contents().find("taxassessment").html();
+		zData.taxassessmentyear = $("iframe").contents().find("taxassessmentyear").html();
+		zData.taxassessment = Math.trunc(zData.taxassessment);
+		zData.taxassessment = zData.taxassessment.toLocaleString();
+		zData.taxassessment = "$" + zData.taxassessment + ".00";
 
 		var zillowXMLData = $("iframe").contents().find("result").html();
-		console.log("Zillow URL: " + zillowURL);
-		console.log(zillowXMLData);
-		console.log("============================")
 
 		if (zData.type == "SingleFamily")
 		{
@@ -360,7 +369,9 @@ $("#address_submit").click(function()
 		}
 		
 		$("#zillow_results").append("<span>Bedrooms: " + zData.bedrooms + "</span><br>")
-			.append("<span>Bathrooms: " + zData.bathrooms + "</span><br>");
+			.append("<span>Bathrooms: " + zData.bathrooms + "</span><br><br>")
+			.append("<span>Tax Assessment: " + zData.taxassessment + "</span><br>")
+			.append("<span>Assessment Year: " + zData.taxassessmentyear + "</span><br>")
 
 
 		$("form").fadeOut(950, function()

@@ -29,7 +29,13 @@ h1
 	display: none;
 	margin-top: 7px;
 	font-family: "AmaticaSCBold";
+	margin: 0 auto;
 
+}
+
+#snapshot_header
+{
+	position: fixed;;
 }
 
 h2
